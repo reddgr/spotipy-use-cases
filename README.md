@@ -13,7 +13,7 @@ This repository contains examples utilizing the Spotipy library to interact with
 
 ## Sort Playlist by Artist Popularity Script
 
-The script sorts Spotify playlists by artist popularity and followers. It addresses the Spotify API's limitation on fetching data (max 100 items per request) by making paginated requests. This approach allows handling playlists with more than 100 tracks.
+The script sorts Spotify playlists by artist popularity and followers. It addresses the Spotify API's limitation on fetching data (max 100 items per request) by making paginated requests. This approach allows handling playlists with more than 100 tracks. Example: ["Seen Live" Spotify playlist with 400+ tracks](https://open.spotify.com/playlist/5ZAVOxwjVynsdh4FXypiI7?si=7fdcc8beca3b4a89)
 
 ### Functionality
 
