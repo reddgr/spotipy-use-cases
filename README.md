@@ -1,5 +1,5 @@
 # spotipy_use_cases
-This repository is a living collection of scripts and examples showcasing different use cases for the Spotipy library, a lightweight Python library for the Spotify Web API. 
+This repository is a living collection of scripts and examples for different use cases of the Spotipy library, a Python library for the Spotify Web API.
 
 # Spotipy Use Cases Repository
 
