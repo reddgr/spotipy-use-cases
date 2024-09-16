@@ -14,19 +14,19 @@ print(f'Redirect URI:\n{os.getenv("SPOTIPY_REDIRECT_URI")}') # 'http://localhost
 # https://www.youtube.com/watch?v=3RGm4jALukM
 
 # Function
-def sort_playlist_by_artist_popularity(playlist_url):
+def sort_playlist_by_artist_popularity(client, playlist_url):
     print("Starting sort_playlist_by_artist_popularity")
     playlist_id = playlist_url.split("/")[-1].split("?")[0]
     print(f"Playlist ID: {playlist_id}")
     tracks_data = []
 
     try:
-        results = sp.playlist_items(playlist_id, limit=100)
+        results = client.playlist_items(playlist_id, limit=100)
         tracks = []
         while results:
             tracks.extend(results['items'])
             if results['next']:
-                results = sp.next(results)
+                results = client.next(results)
             else:
                 results = None
         print(f"Tracks fetched: {len(tracks)}")
@@ -39,7 +39,7 @@ def sort_playlist_by_artist_popularity(playlist_url):
             track = track_item['track']
             uri = track['uri']  
             artist_id = track['artists'][0]['id']
-            artist = sp.artist(artist_id)
+            artist = client.artist(artist_id)
             artist_name = artist['name']
             artist_popularity = artist['popularity']
             genres = artist['genres']
@@ -65,19 +65,19 @@ def sort_playlist_by_artist_popularity(playlist_url):
     print("Tracks sorted by artist popularity and followers")
 
     try:
-        user_id = sp.current_user()["id"]
+        user_id = client.current_user()["id"]
         print(f"User ID: {user_id}")
 
-        original_playlist = sp.playlist(playlist_id)
+        original_playlist = client.playlist(playlist_id)
         original_name = original_playlist['name']
-        new_playlist_name = original_name + " - sorted with Spotipy"
-        new_playlist = sp.user_playlist_create(user_id, new_playlist_name, public=False)
+        new_playlist_name = original_name + " - sorted by artist popularity"
+        new_playlist = client.user_playlist_create(user_id, new_playlist_name, public=False)
         new_playlist_id = new_playlist["id"]
         track_uris = df_tracks_sorted["uri"].tolist() 
         print(f"Creating new playlist with ID: {new_playlist_id}")
 
         for i in range(0, len(track_uris), 100):
-            sp.playlist_add_items(new_playlist_id, track_uris[i:i+100])
+            client.playlist_add_items(new_playlist_id, track_uris[i:i+100])
             print(f"Added tracks {i+1}-{min(i+100, len(track_uris))} to new playlist")
     except Exception as e:
         print(f"Error during playlist creation or track addition: {e}")
@@ -96,6 +96,6 @@ sp = spotipy.Spotify(auth_manager=SpotifyOAuth(client_id=os.getenv("SPOTIPY_CLIE
 # playlist_url = "https://open.spotify.com/playlist/2qajcUJ7x242tTuBpEKUKx"
 # Enter your playlist URL
 playlist_url = input("Please enter the playlist URL: ")
-df_sorted = sort_playlist_by_artist_popularity(playlist_url)
+df_sorted = sort_playlist_by_artist_popularity(sp, playlist_url)
 df_sorted.head(10) 
 # %%
